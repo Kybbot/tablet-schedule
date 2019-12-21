@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+	<title>Расписание ваших таблеток</title>
+	<meta name="author" content="https://github.com/Kybbot">
+	<meta name="description" content="Расписание ваших таблеток">
+	
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<link rel="icon" href="img/favicon/favicon.ico">
+
+	<meta name="theme-color" content="#000">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-12 d-flex align-items-center justify-content-between flex-wrap">
+					<h1>Расписание ваших таблеток <i class="fas fa-pills"></i></h1>
+					<button id="open-form" class="open-form">Добавить расписание</button> 
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<form class=" main-form flex-column align-items-center justify-content-around">
+		<label>Добавить расписание</label>
+		<input type="text" id="schedule-title" placeholder="Введите название">
+		<input type="text" id="schedule-dates" placeholder="Введите количество дней">
+		<div class="btns d-flex align-items-center justify-content-between w-100">
+			<button type="button" id="add-schedule">Добавить</button>
+			<button type="button" id="close-form">Закрыть</button>
+		</div>
+	</form>
+
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-12 ">
+					<div class="schedules-container d-flex flex-wrap">
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="js/main.js"></script>
+</body>
+</html>

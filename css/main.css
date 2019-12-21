@@ -1,0 +1,236 @@
+::-webkit-input-placeholder {
+  color: #000000;
+}
+
+::-moz-placeholder {
+  color: #000000;
+}
+
+:-ms-input-placeholder {
+  color: #000000;
+}
+
+::-ms-input-placeholder {
+  color: #000000;
+}
+
+::placeholder {
+  color: #000000;
+}
+
+::-moz-selection {
+  background-color: gold;
+  color: #fff;
+}
+
+::selection {
+  background-color: gold;
+  color: #fff;
+}
+
+body {
+  font-size: 16px;
+  min-width: 320px;
+  position: relative;
+  line-height: 1.65;
+  font-family: "roboto-example", sans-serif;
+  overflow-x: hidden;
+  color: #000000;
+  background-image: url(../img/1.png);
+}
+
+body input, body textarea {
+  border: #000000 1px solid;
+  outline: none;
+}
+
+body input:focus:required:invalid, body textarea:focus:required:invalid {
+  border-color: red;
+}
+
+body input:required:valid, body textarea:required:valid {
+  border-color: green;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-responsive.img-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+header h1 {
+  color: #3494E6;
+  margin: 0;
+  padding: 0;
+}
+
+header h1 i {
+  color: gold;
+}
+
+header .open-form {
+  border-radius: 10px;
+  padding: 5px 8px;
+  color: #ffffff;
+  background-color: #3494E6;
+  -webkit-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+  border: 1px solid #ffffff;
+}
+
+header .open-form:hover {
+  border: 1px solid gold;
+  color: gold;
+}
+
+form {
+  display: none;
+  position: absolute;
+  z-index: 999;
+  top: 200px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  background: -webkit-gradient(linear, left top, right top, from(#3494E6), to(#EC6EAD));
+  background: -o-linear-gradient(left, #3494E6, #EC6EAD);
+  background: linear-gradient(90deg, #3494E6, #EC6EAD);
+  padding: 10px 25px;
+  border-radius: 10px;
+  color: #ffffff;
+}
+
+form label {
+  font-size: 18px;
+}
+
+form input {
+  width: 250px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid silver;
+  color: #ffffff;
+}
+
+form input[type="text"]::-moz-placeholder {
+  color: #ffffff;
+}
+
+form input[type="text"]::-webkit-input-placeholder {
+  color: #ffffff;
+}
+
+form button {
+  border-radius: 10px;
+  padding: 2px 10px;
+  color: #ffffff;
+  background-color: #3494E6;
+  -webkit-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+  border: 1px solid #ffffff;
+}
+
+form button:hover {
+  border: 1px solid gold;
+  color: gold;
+}
+
+main {
+  margin-top: 40px;
+}
+
+main .schedule {
+  width: 250px;
+  position: relative;
+  margin: 0 15px 20px 15px;
+  -webkit-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+  padding-bottom: 5px;
+}
+
+main .schedule-title {
+  padding-left: 5px;
+  color: #3494E6;
+  font-size: 16px;
+}
+
+main .schedule-delete-btn {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  top: -1px;
+  right: -4px;
+  font-size: 20px;
+  cursor: pointer;
+  -webkit-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+
+main .schedule-delete-btn:hover {
+  color: red;
+}
+
+main .date-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 5px;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  background-color: #ffffff;
+}
+
+main .date-container .date {
+  height: 40px;
+  width: 40px;
+  border: 1px solid silver;
+  -webkit-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+main .date-container .date:hover {
+  border: 2px solid gold;
+}
+
+.confirm-date {
+  border: 2px solid gold !important;
+}
+
+.confirm-date::before {
+  content: '';
+  display: inline-block;
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  border-radius: 50%;
+  padding-left: 5px;
+  position: absolute;
+  top: 22px;
+  left: 1px;
+}
