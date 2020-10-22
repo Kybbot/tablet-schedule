@@ -1,98 +1,114 @@
+const openForm = document.getElementById('open-form');
+const closeForm = document.getElementById('close-form');
+
+openForm.addEventListener('click', function() {
+	document.querySelector('.main-form').style.display = "flex";
+});
+
+closeForm.addEventListener('click', function() {
+	document.querySelector('.main-form').style.display = "none";
+});
+
+const btnAddSchedule = document.getElementById('add-schedule');
+const scheduleTitle = document.getElementById('schedule-title');
+const scheduleDates = document.getElementById('schedule-dates');
+const schedulesContainer = document.querySelector('.schedules-container');
+
 load();
 confirmDate();
 updateTitle();
 deleteSchedule();
-addSchedule();
 
-const openForm = document.getElementById('open-form');
+btnAddSchedule.addEventListener('click', function() {
+	if (scheduleTitle.value && scheduleDates.value) {
+		
+		save(createSchedule(scheduleTitle.value, scheduleDates.value));
+		clear();
+		load();
 
-openForm.addEventListener('click', function(event) {
-	document.querySelector('.main-form').style.display = "flex";
+		scheduleTitle.value = '';
+		scheduleDates.value = '';
+		document.querySelector('.main-form').style.display = "none";
+
+		confirmDate();
+		updateTitle();
+		deleteSchedule();
+	} else {
+		alert("Заплнити пожалуйста поля!");
+	}
 });
-
-const closeForm = document.getElementById('close-form');
-
-closeForm.addEventListener('click', function(event) {
-	document.querySelector('.main-form').style.display = "none";
-});
-
-function addSchedule(){
-	const btnAddSchedule = document.getElementById('add-schedule');
-	const scheduleTitle = document.getElementById('schedule-title');
-	const scheduleDates = document.getElementById('schedule-dates');
-	const schedulesContainer = document.querySelector('.schedules-container');
-
-	btnAddSchedule.addEventListener('click', function(event) {
-		if (scheduleTitle.value && scheduleDates.value) {
-			const scheduleDiv = document.createElement('div');
-			scheduleDiv.classList.add('schedule');
-
-			const scheduleTitlerDiv = document.createElement('div');
-			scheduleTitlerDiv.classList.add('schedule-title');
-			scheduleTitlerDiv.setAttribute('contenteditable', 'true');
-			scheduleTitlerDiv.textContent = scheduleTitle.value;
-
-			const scheduleDeleteBtn = document.createElement('div');
-			scheduleDeleteBtn.classList.add('schedule-delete-btn');
-			scheduleDeleteBtn.setAttribute('title', 'Удалить Расписание!')
-			scheduleDeleteBtn.innerHTML = '&times;';
-
-			const dateContainer = document.createElement('div');
-			dateContainer.classList.add('date-container');
-
-			for (let i = 1; i <= scheduleDates.value; i++) {
-				const scheduleDate = document.createElement('div');
-				scheduleDate.classList.add('date');
-				scheduleDate.textContent = i;
-				dateContainer.append(scheduleDate);
-			}
-
-			scheduleDiv.append(scheduleTitlerDiv);
-			scheduleDiv.append(scheduleDeleteBtn);
-			scheduleDiv.append(dateContainer);
-
-			schedulesContainer.append(scheduleDiv);
-			scheduleTitle.value = '';
-			scheduleDates.value = '';
-			document.querySelector('.main-form').style.display = "none";
-			confirmDate();
-			deleteSchedule();
-			save();
-		} else {
-			alert("Заплнити пожалуйста поля!");
-		}
-	});
-}
 
 function confirmDate() {
 	document
 	.querySelectorAll('.date')
 	.forEach(x => {
-		let flag = true;
-		x.addEventListener('click', function(event) {			
-			if (flag) {
-				flag = false;
-				this.classList.add('confirm-date');
-				this.setAttribute('data-confirm', true);
-				save();
-			} else {
-				flag = true;
+		x.addEventListener('click', function() {	
+			let schedules = JSON.parse(localStorage.getItem('data'));
+			let title = x.parentElement.getAttribute('date-container-name');
+			let index = schedules.findIndex(item => item.title === title);
+			let obj = schedules.find(item => item.title === title);
+			let dates = obj.dates;
+			let date = dates.find(item => item.date == x.textContent);
+
+			if (x.classList.value.includes('confirm-date')) {
 				this.classList.remove('confirm-date');
-				this.removeAttribute('data-confirm');
-				save();
+
+				date.completed = false;
+				let newObj = {
+					title: x.parentElement.getAttribute('date-container-name'),
+					dates: dates
+				}
+				schedules.splice(index, 1, newObj);
+				const json = JSON.stringify(schedules);
+				localStorage.setItem('data', json);
+			} else {
+				this.classList.add('confirm-date');
+
+				date.completed = true;
+				let newObj = {
+					title: x.parentElement.getAttribute('date-container-name'),
+					dates: dates
+				}
+				schedules.splice(index, 1, newObj);
+				const json = JSON.stringify(schedules);
+				localStorage.setItem('data', json);
+				updateTitle();
+				deleteSchedule();
 			}
 		});
 	});
 }
 
 function updateTitle() {
+	let schedules = JSON.parse(localStorage.getItem('data'));
+	let name = '';
+	let obj = {};
+	let index = '';
+	let newName = '';
+	
 	document
 		.querySelectorAll('.schedule-title')
 		.forEach(x => {
-			x.addEventListener('blur', () => {
-				save();
-			})
-		})
+			x.addEventListener('click', function() {
+				name = x.textContent;
+				obj = schedules.find(item => item.title === name);
+				index = schedules.findIndex(item => item.title === name);
+			});
+			x.addEventListener('input', function() {
+				newName = x.textContent;
+				obj.title = newName;
+			});
+			x.addEventListener('blur', function() {
+				schedules.splice(index, 1, obj);
+				const json = JSON.stringify(schedules);
+				localStorage.setItem('data', json);
+				clear();
+				load();
+				updateTitle();
+				confirmDate();
+				deleteSchedule();
+			});
+		});
 }
 
 function deleteSchedule() {
@@ -100,43 +116,41 @@ function deleteSchedule() {
 		.querySelectorAll('.schedule-delete-btn')
 		.forEach(x => {
 			x.addEventListener('click', () => {
+				let schedules = JSON.parse(localStorage.getItem('data'));
+				let name = x.previousElementSibling.textContent;
+				let index = schedules.findIndex(item => item.title === name);
 				const question = confirm('Удалить расписание ?');
 				if (question) {
+					schedules.splice(index, 1);
+					const json = JSON.stringify(schedules);
+					localStorage.setItem('data', json);
 					x.parentElement.remove();
-					save();
 				}
-			})
-		})
+			});
+		});
 }
 
-function createSchedule(html) {
-	const schedule = document.createElement('div');
-	schedule.classList.add('schedule');
-	schedule.innerHTML = html;
-
-	return schedule;
-}
-
-function save() {
-	const object = {
-		items: []
+function clear() {
+	let element = document.querySelector(".schedules-container");
+	while (element.firstChild) {
+		element.removeChild(element.firstChild);
 	}
+}
 
-	document
-		.querySelectorAll('.schedule')
-		.forEach(element => {
-			const item = {
-				schedule: element.innerHTML
-			}
+function save(schedule) {
+	if (localStorage.getItem('data')) {	
+		const schedules = JSON.parse(localStorage.getItem('data'));
+		schedules.push(schedule);
 
-			object.items.push(item);
-		})
+		const json = JSON.stringify(schedules);
+		localStorage.setItem('data', json);
+	} else {
+		const schedules = [];
+		schedules.push(schedule);
 
-	const json = JSON.stringify(object);
-
-	localStorage.setItem('data', json);
-
-	return json;
+		const json = JSON.stringify(schedules);
+		localStorage.setItem('data', json);
+	}
 }
 
 function load() {
@@ -144,11 +158,60 @@ function load() {
 		return
 	}
 
-	let mountePoint = document.querySelector('.schedules-container');
-
 	const object = JSON.parse(localStorage.getItem('data'));
-	for (const item of object.items) {
-		const scheduleElement = createSchedule(item.schedule);
-		mountePoint.append(scheduleElement);
+	renderSchedule(object);
+}
+
+function renderSchedule(data) {
+	data.map(item => {
+		const scheduleDiv = document.createElement('div');
+		scheduleDiv.classList.add('schedule');
+
+		const scheduleTitleDiv = document.createElement('div');
+		scheduleTitleDiv.classList.add('schedule-title');
+		scheduleTitleDiv.setAttribute('contenteditable', 'true');
+		scheduleTitleDiv.textContent = item.title;
+
+		const scheduleDeleteBtn = document.createElement('div');
+		scheduleDeleteBtn.classList.add('schedule-delete-btn');
+		scheduleDeleteBtn.setAttribute('title', 'Удалить Расписание!')
+		scheduleDeleteBtn.innerHTML = '&times;';
+
+		const dateContainer = document.createElement('div');
+		dateContainer.classList.add('date-container');
+		dateContainer.setAttribute('date-container-name', item.title);
+
+		item.dates.map(date => {
+			const scheduleDate = document.createElement('div');
+			scheduleDate.classList.add('date');
+			scheduleDate.textContent = date.date;
+			scheduleDate.setAttribute('date-confirm', date.completed);
+			if(date.completed) {
+				scheduleDate.classList.add('confirm-date');
+			}
+			dateContainer.append(scheduleDate);
+		});
+
+		scheduleDiv.append(scheduleTitleDiv);
+		scheduleDiv.append(scheduleDeleteBtn);
+		scheduleDiv.append(dateContainer);
+
+		schedulesContainer.append(scheduleDiv);
+	});
+}
+
+function createSchedule(title, dates) {
+	let datesArr = [];
+
+	for (let i = 1; i <= dates; i++) {
+		datesArr.push({
+			date: i,
+			completed: false
+		})
+	}
+
+	return {
+		title: title,
+		dates: datesArr
 	}
 }
